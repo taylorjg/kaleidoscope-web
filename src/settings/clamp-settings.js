@@ -1,0 +1,51 @@
+import { DEFAULT_URL_SETTINGS, MODES } from "./defaults.js";
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+/**
+ * Clamp and validate URL settings to safe ranges.
+ * @param {Record<string, unknown>} raw
+ * @returns {typeof DEFAULT_URL_SETTINGS}
+ */
+export const clampSettings = (raw) => {
+  const s = { ...DEFAULT_URL_SETTINGS, ...raw };
+
+  s.mode = MODES.includes(s.mode) ? s.mode : DEFAULT_URL_SETTINGS.mode;
+  s.segments = clamp(
+    Number(s.segments) || DEFAULT_URL_SETTINGS.segments,
+    3,
+    12
+  );
+  s.mirror = Boolean(s.mirror);
+  s.rotation = clamp(
+    Number(s.rotation) || DEFAULT_URL_SETTINGS.rotation,
+    0,
+    100
+  );
+  s.flow = clamp(Number(s.flow) || DEFAULT_URL_SETTINGS.flow, 0, 100);
+  s.colourShift = clamp(
+    Number(s.colourShift) || DEFAULT_URL_SETTINGS.colourShift,
+    0,
+    100
+  );
+  s.complexity = clamp(
+    Number(s.complexity) || DEFAULT_URL_SETTINGS.complexity,
+    0,
+    100
+  );
+  s.saturation = clamp(
+    Number(s.saturation) || DEFAULT_URL_SETTINGS.saturation,
+    0,
+    100
+  );
+  s.seed =
+    s.seed == null || Number.isNaN(Number(s.seed))
+      ? DEFAULT_URL_SETTINGS.seed
+      : Math.floor(Number(s.seed));
+  s.controls =
+    s.controls !== false && s.controls !== "false" && s.controls !== 0;
+  s.fullscreen =
+    s.fullscreen === true || s.fullscreen === "true" || s.fullscreen === 1;
+
+  return s;
+};
