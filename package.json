@@ -2,7 +2,7 @@
   "name": "kaleidoscope-web",
   "description": "Kaleidoscope web app — camera and generated modes with WebGL",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
