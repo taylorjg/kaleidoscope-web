@@ -21,6 +21,8 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import { ModeToggle } from "./mode-toggle.jsx";
 import { PermissionPrompt } from "./permission-prompt.jsx";
 
+import packageJson from "../../package.json";
+
 const SliderRow = ({ label, value, onChange, min = 0, max = 100 }) => (
   <Box sx={{ px: 0.5 }}>
     <Typography variant="caption" color="text.secondary">
@@ -194,6 +196,21 @@ export const ControlPanel = ({
             >
               Snapshot
             </Button>
+
+            <Typography
+              variant="caption"
+              component="p"
+              aria-label="Application version"
+              sx={{
+                fontStyle: "italic",
+                textAlign: "right",
+                color: "text.secondary",
+                pt: 0.5,
+                mb: 0,
+              }}
+            >
+              v{packageJson.version}
+            </Typography>
           </Stack>
         </Box>
       </Collapse>
