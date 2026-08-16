@@ -7,12 +7,16 @@ export const GraphicsCanvas = forwardRef(function GraphicsCanvas(
   { settings, onStatus, onTap },
   ref
 ) {
-  const { containerRef, snapshot, reseed } = useGraphicsEngine({
+  const { containerRef, snapshot, reseed, flipCamera } = useGraphicsEngine({
     settings,
     onStatus,
   });
 
-  useImperativeHandle(ref, () => ({ snapshot, reseed }), [snapshot, reseed]);
+  useImperativeHandle(ref, () => ({ snapshot, reseed, flipCamera }), [
+    snapshot,
+    reseed,
+    flipCamera,
+  ]);
 
   const handleKeyDown = useCallback(
     (event) => {

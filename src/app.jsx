@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import Typography from "@mui/material/Typography";
 
 import { useKaleidoscopeSettings } from "@app/hooks/use-kaleidoscope-settings.js";
 import { GraphicsCanvas } from "@app/components/graphics-canvas.jsx";
@@ -20,6 +19,8 @@ export const App = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
+  const [cameraCanFlip, setCameraCanFlip] = useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = useState("user");
   const canvasRef = useRef(null);
   const fullscreenRequested = useRef(false);
 
@@ -40,10 +41,20 @@ export const App = () => {
 
   const handleStatus = useCallback((next) => {
     setStatus(next);
-    if (next.type === "camera-ready") setCameraActive(true);
+    if (next.type === "camera-ready") {
+      setCameraActive(true);
+      setCameraCanFlip(Boolean(next.canFlip));
+      if (next.facingMode) setCameraFacingMode(next.facingMode);
+    }
     if (next.type === "camera-stopped" || next.type === "camera-denied") {
       setCameraActive(false);
+      setCameraCanFlip(false);
+      setCameraFacingMode("user");
     }
+  }, []);
+
+  const handleFlipCamera = useCallback(async () => {
+    await canvasRef.current?.flipCamera?.();
   }, []);
 
   const handleSnapshot = useCallback(() => {
@@ -93,23 +104,11 @@ export const App = () => {
           isFullscreen={isFullscreen}
           onToggleFullscreen={handleToggleFullscreen}
           cameraActive={cameraActive && settings.mode === "camera"}
+          cameraCanFlip={cameraCanFlip && settings.mode === "camera"}
+          cameraFacingMode={cameraFacingMode}
+          onFlipCamera={handleFlipCamera}
         />
       )}
-
-      <Typography
-        variant="caption"
-        component="p"
-        sx={{
-          position: "fixed",
-          bottom: 8,
-          left: 8,
-          zIndex: 1,
-          opacity: 0.5,
-          pointerEvents: "none",
-        }}
-      >
-        Kaleidoscope
-      </Typography>
     </StyledAppShell>
   );
 };

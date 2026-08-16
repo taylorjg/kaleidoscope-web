@@ -98,6 +98,10 @@ export class KaleidoscopeEngine {
     return this._canvas.toDataURL("image/png");
   }
 
+  flipCamera() {
+    return this._camera?.flip() ?? Promise.resolve(false);
+  }
+
   _handleResize() {
     if (!this._gl) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);

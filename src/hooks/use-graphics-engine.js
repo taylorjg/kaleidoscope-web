@@ -40,5 +40,10 @@ export function useGraphicsEngine({ settings, onStatus }) {
 
   const reseed = useCallback(() => engineRef.current?.reseed() ?? null, []);
 
-  return { containerRef, snapshot, reseed };
+  const flipCamera = useCallback(
+    () => engineRef.current?.flipCamera() ?? Promise.resolve(false),
+    []
+  );
+
+  return { containerRef, snapshot, reseed, flipCamera };
 }

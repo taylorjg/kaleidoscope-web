@@ -19,6 +19,7 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import CameraswitchIcon from "@mui/icons-material/Cameraswitch";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 
 import { ModeToggle } from "./mode-toggle.jsx";
@@ -192,6 +193,9 @@ export const ControlPanel = ({
   isFullscreen,
   onToggleFullscreen,
   cameraActive,
+  cameraCanFlip,
+  cameraFacingMode,
+  onFlipCamera,
 }) => {
   const theme = useTheme();
   // Portrait phones fit sm; landscape phones are wider than sm but still short.
@@ -248,6 +252,20 @@ export const ControlPanel = ({
           spacing={0.5}
           sx={{ justifyContent: "flex-end" }}
         >
+          {cameraActive && cameraCanFlip && (
+            <IconButton
+              onClick={onFlipCamera}
+              aria-label={
+                cameraFacingMode === "environment"
+                  ? "Switch to front camera"
+                  : "Switch to back camera"
+              }
+              size="small"
+              sx={{ bgcolor: "rgba(0,0,0,0.6)" }}
+            >
+              <CameraswitchIcon />
+            </IconButton>
+          )}
           <IconButton
             onClick={onToggleFullscreen}
             aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
@@ -375,4 +393,7 @@ ControlPanel.propTypes = {
   isFullscreen: PropTypes.bool.isRequired,
   onToggleFullscreen: PropTypes.func.isRequired,
   cameraActive: PropTypes.bool.isRequired,
+  cameraCanFlip: PropTypes.bool.isRequired,
+  cameraFacingMode: PropTypes.oneOf(["user", "environment"]).isRequired,
+  onFlipCamera: PropTypes.func.isRequired,
 };
