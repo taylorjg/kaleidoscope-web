@@ -4,6 +4,14 @@ import {
   createFullscreenQuad,
 } from "./context.js";
 
+/** Boost pattern density on narrow viewports so the centre hub feels smaller. */
+export const getPatternScale = (canvas) => {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const minCss = Math.min(canvas.width / dpr, canvas.height / dpr);
+  if (minCss >= 600) return 1;
+  return 1 + ((600 - minCss) / 600) * 0.4;
+};
+
 /**
  * @param {WebGL2RenderingContext} gl
  * @param {ReturnType<typeof getUniformLocations>} uniforms
@@ -37,6 +45,7 @@ export const drawFrame = (
   gl.uniform1f(uniforms.uComplexity, state.generative.detail);
   gl.uniform1f(uniforms.uSeed, state.generative.seed);
   gl.uniform1f(uniforms.uAutoSeed, autoSeed);
+  gl.uniform1f(uniforms.uPatternScale, getPatternScale(gl.canvas));
   gl.uniform1f(uniforms.uHasCameraTexture, hasCamera ? 1 : 0);
 
   gl.activeTexture(gl.TEXTURE0);

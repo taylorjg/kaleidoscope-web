@@ -88,6 +88,8 @@ export const App = () => {
           onReseed={handleReseed}
           collapsed={collapsed}
           onToggleCollapsed={() => setCollapsed((c) => !c)}
+          onClosePanel={() => setCollapsed(true)}
+          onOpenPanel={() => setCollapsed(false)}
           isFullscreen={isFullscreen}
           onToggleFullscreen={handleToggleFullscreen}
           cameraActive={cameraActive && settings.mode === "camera"}

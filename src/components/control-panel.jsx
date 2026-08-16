@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -9,7 +8,11 @@ import {
   Slider,
   Stack,
   Switch,
+  SwipeableDrawer,
   Typography,
+  Drawer,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import TuneIcon from "@mui/icons-material/Tune";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
@@ -47,6 +50,133 @@ SliderRow.propTypes = {
   max: PropTypes.number,
 };
 
+const panelSurfaceSx = {
+  bgcolor: "rgba(0,0,0,0.72)",
+  backdropFilter: "blur(8px)",
+};
+
+const scrollContainerSx = {
+  flex: 1,
+  minHeight: 0,
+  overflowY: "auto",
+  WebkitOverflowScrolling: "touch",
+  overscrollBehavior: "contain",
+  touchAction: "pan-y",
+};
+
+const ControlPanelContent = ({
+  settings,
+  params,
+  setImmediate,
+  setSlider,
+  status,
+  onSnapshot,
+  onReseed,
+  isGenerative,
+  compact,
+}) => (
+  <Stack spacing={compact ? 1.5 : 2}>
+    <PermissionPrompt
+      status={status}
+      onRetry={() => setImmediate({ mode: "camera" })}
+      onSwitchGenerative={() => setImmediate({ mode: "generative" })}
+    />
+
+    <ModeToggle
+      mode={settings.mode}
+      onChange={(mode) => setImmediate({ mode })}
+    />
+
+    <SliderRow
+      label="Segments"
+      value={params.segments}
+      min={3}
+      max={12}
+      onChange={(v) => setImmediate({ segments: v })}
+    />
+
+    <FormControlLabel
+      control={
+        <Switch
+          checked={params.mirror}
+          onChange={(e) => setImmediate({ mirror: e.target.checked })}
+          slotProps={{ input: { "aria-label": "Mirror symmetry" } }}
+        />
+      }
+      label="Mirror"
+    />
+
+    <SliderRow
+      label="Rotation"
+      value={params.rotation}
+      onChange={(v) => setSlider("rotation", v)}
+    />
+
+    {isGenerative && (
+      <>
+        <SliderRow
+          label="Motion"
+          value={params.motion}
+          onChange={(v) => setSlider("motion", v)}
+        />
+        <SliderRow
+          label="Detail"
+          value={params.detail}
+          onChange={(v) => setSlider("detail", v)}
+        />
+        {!compact && (
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<AutoFixHighIcon />}
+            onClick={onReseed}
+            fullWidth
+          >
+            New pattern
+          </Button>
+        )}
+      </>
+    )}
+
+    <Button
+      variant="contained"
+      size="small"
+      startIcon={<PhotoCameraIcon />}
+      onClick={onSnapshot}
+      fullWidth
+    >
+      Snapshot
+    </Button>
+
+    <Typography
+      variant="caption"
+      component="p"
+      aria-label="Application version"
+      sx={{
+        fontStyle: "italic",
+        textAlign: "right",
+        color: "text.secondary",
+        pt: 0.5,
+        mb: 0,
+      }}
+    >
+      v{packageJson.version}
+    </Typography>
+  </Stack>
+);
+
+ControlPanelContent.propTypes = {
+  settings: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  setImmediate: PropTypes.func.isRequired,
+  setSlider: PropTypes.func.isRequired,
+  status: PropTypes.object,
+  onSnapshot: PropTypes.func.isRequired,
+  onReseed: PropTypes.func.isRequired,
+  isGenerative: PropTypes.bool.isRequired,
+  compact: PropTypes.bool,
+};
+
 export const ControlPanel = ({
   settings,
   params,
@@ -57,164 +187,176 @@ export const ControlPanel = ({
   onReseed,
   collapsed,
   onToggleCollapsed,
+  onClosePanel,
+  onOpenPanel,
   isFullscreen,
   onToggleFullscreen,
   cameraActive,
 }) => {
+  const theme = useTheme();
+  // Portrait phones fit sm; landscape phones are wider than sm but still short.
+  const isPortraitPhone = useMediaQuery(theme.breakpoints.down("sm"));
+  const isLandscapePhone = useMediaQuery(
+    "(max-height: 520px) and (min-width: 600px)"
+  );
+  const useMobilePanel = isPortraitPhone || isLandscapePhone;
   const isGenerative = settings.mode === "generative";
 
-  const handleModeChange = useCallback(
-    (mode) => setImmediate({ mode }),
-    [setImmediate]
+  const panelContent = (
+    <ControlPanelContent
+      settings={settings}
+      params={params}
+      setImmediate={setImmediate}
+      setSlider={setSlider}
+      status={status}
+      onSnapshot={onSnapshot}
+      onReseed={onReseed}
+      isGenerative={isGenerative}
+      compact={useMobilePanel && isGenerative}
+    />
   );
 
   return (
-    <Box
-      component="aside"
-      aria-label="Kaleidoscope controls"
-      sx={{
-        position: "fixed",
-        top: { xs: 8, sm: 16 },
-        right: { xs: 8, sm: 16 },
-        zIndex: 2,
-        width: { xs: "min(100% - 16px, 320px)", sm: 300 },
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "stretch",
-      }}
-    >
-      {cameraActive && (
+    <>
+      <Box
+        component="aside"
+        aria-label="Kaleidoscope controls"
+        sx={{
+          position: "fixed",
+          top: { xs: 8, sm: 16 },
+          right: { xs: 8, sm: 16 },
+          zIndex: theme.zIndex.drawer + 1,
+          width: { xs: "auto", sm: 300 },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+        }}
+      >
+        {cameraActive && (
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{ pb: 0.5, alignItems: "center", justifyContent: "flex-end" }}
+          >
+            <CameraAltIcon fontSize="small" color="error" aria-hidden />
+            <Typography variant="caption">Camera active</Typography>
+          </Stack>
+        )}
+
         <Stack
           direction="row"
           spacing={0.5}
-          sx={{ pb: 0.5, alignItems: "center", justifyContent: "flex-end" }}
+          sx={{ justifyContent: "flex-end" }}
         >
-          <CameraAltIcon fontSize="small" color="error" aria-hidden />
-          <Typography variant="caption">Camera active</Typography>
+          <IconButton
+            onClick={onToggleFullscreen}
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            aria-pressed={isFullscreen}
+            size="small"
+            sx={{ bgcolor: "rgba(0,0,0,0.6)" }}
+          >
+            {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+          </IconButton>
+          <IconButton
+            onClick={onToggleCollapsed}
+            aria-expanded={!collapsed}
+            aria-label={collapsed ? "Show controls" : "Hide controls"}
+            size="small"
+            sx={{ bgcolor: "rgba(0,0,0,0.6)" }}
+          >
+            <TuneIcon />
+          </IconButton>
         </Stack>
-      )}
 
-      <Stack
-        direction="row"
-        spacing={0.5}
-        sx={{ width: "100%", justifyContent: "flex-end" }}
-      >
-        <IconButton
-          onClick={onToggleFullscreen}
-          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-          aria-pressed={isFullscreen}
-          size="small"
-          sx={{ bgcolor: "rgba(0,0,0,0.6)" }}
-        >
-          {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-        </IconButton>
-        <IconButton
-          onClick={onToggleCollapsed}
-          aria-expanded={!collapsed}
-          aria-label={collapsed ? "Show controls" : "Hide controls"}
-          size="small"
-          sx={{ bgcolor: "rgba(0,0,0,0.6)" }}
-        >
-          <TuneIcon />
-        </IconButton>
-      </Stack>
-
-      <Collapse in={!collapsed}>
-        <Box
-          sx={{
-            mt: 1.5,
-            p: 2,
-            borderRadius: 2,
-            bgcolor: "rgba(0,0,0,0.72)",
-            backdropFilter: "blur(8px)",
-          }}
-        >
-          <Stack spacing={2}>
-            <PermissionPrompt
-              status={status}
-              onRetry={() => setImmediate({ mode: "camera" })}
-              onSwitchGenerative={() => setImmediate({ mode: "generative" })}
-            />
-
-            <ModeToggle mode={settings.mode} onChange={handleModeChange} />
-
-            <SliderRow
-              label="Segments"
-              value={params.segments}
-              min={3}
-              max={12}
-              onChange={(v) => setImmediate({ segments: v })}
-            />
-
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={params.mirror}
-                  onChange={(e) => setImmediate({ mirror: e.target.checked })}
-                  slotProps={{ input: { "aria-label": "Mirror symmetry" } }}
-                />
-              }
-              label="Mirror"
-            />
-
-            <SliderRow
-              label="Rotation"
-              value={params.rotation}
-              onChange={(v) => setSlider("rotation", v)}
-            />
-
-            {isGenerative && (
-              <>
-                <SliderRow
-                  label="Motion"
-                  value={params.motion}
-                  onChange={(v) => setSlider("motion", v)}
-                />
-                <SliderRow
-                  label="Detail"
-                  value={params.detail}
-                  onChange={(v) => setSlider("detail", v)}
-                />
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<AutoFixHighIcon />}
-                  onClick={onReseed}
-                  fullWidth
-                >
-                  New pattern
-                </Button>
-              </>
-            )}
-
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<PhotoCameraIcon />}
-              onClick={onSnapshot}
-              fullWidth
-            >
-              Snapshot
-            </Button>
-
-            <Typography
-              variant="caption"
-              component="p"
-              aria-label="Application version"
+        {!useMobilePanel && (
+          <Collapse in={!collapsed}>
+            <Box
               sx={{
-                fontStyle: "italic",
-                textAlign: "right",
-                color: "text.secondary",
-                pt: 0.5,
-                mb: 0,
+                mt: 1.5,
+                p: 2,
+                borderRadius: 2,
+                maxHeight: "calc(100dvh - 32px)",
+                overflowY: "auto",
+                WebkitOverflowScrolling: "touch",
+                ...panelSurfaceSx,
               }}
             >
-              v{packageJson.version}
-            </Typography>
-          </Stack>
-        </Box>
-      </Collapse>
-    </Box>
+              {panelContent}
+            </Box>
+          </Collapse>
+        )}
+      </Box>
+
+      {useMobilePanel &&
+        (isLandscapePhone ? (
+          <Drawer
+            anchor="right"
+            open={!collapsed}
+            onClose={onClosePanel}
+            ModalProps={{ keepMounted: true }}
+            slotProps={{
+              paper: {
+                sx: {
+                  ...panelSurfaceSx,
+                  width: "clamp(380px, 52vw, 520px)",
+                  height: "100%",
+                  maxHeight: "100dvh",
+                  pt: `calc(12px + env(safe-area-inset-top, 0px))`,
+                  pb: `calc(12px + env(safe-area-inset-bottom, 0px))`,
+                  pl: `calc(16px + env(safe-area-inset-right, 0px))`,
+                  pr: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  boxSizing: "border-box",
+                  overflowY: "hidden",
+                },
+              },
+            }}
+          >
+            <Box sx={scrollContainerSx}>{panelContent}</Box>
+          </Drawer>
+        ) : (
+          <SwipeableDrawer
+            anchor="bottom"
+            open={!collapsed}
+            onClose={onClosePanel}
+            onOpen={onOpenPanel}
+            disableSwipeToOpen
+            ModalProps={{ keepMounted: true }}
+            slotProps={{
+              paper: {
+                sx: {
+                  ...panelSurfaceSx,
+                  borderTopLeftRadius: 16,
+                  borderTopRightRadius: 16,
+                  display: "flex",
+                  flexDirection: "column",
+                  maxHeight: "min(55dvh, 480px)",
+                  px: 2,
+                  pt: 1,
+                  pb: `calc(16px + env(safe-area-inset-bottom, 0px))`,
+                  boxSizing: "border-box",
+                  overflowY: "hidden",
+                },
+              },
+            }}
+          >
+            <Box
+              aria-hidden="true"
+              sx={{
+                flexShrink: 0,
+                width: 40,
+                height: 4,
+                borderRadius: 2,
+                bgcolor: "rgba(255,255,255,0.35)",
+                mx: "auto",
+                mb: 1.5,
+              }}
+            />
+            <Box sx={scrollContainerSx}>{panelContent}</Box>
+          </SwipeableDrawer>
+        ))}
+    </>
   );
 };
 
@@ -228,6 +370,8 @@ ControlPanel.propTypes = {
   onReseed: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
   onToggleCollapsed: PropTypes.func.isRequired,
+  onClosePanel: PropTypes.func.isRequired,
+  onOpenPanel: PropTypes.func.isRequired,
   isFullscreen: PropTypes.bool.isRequired,
   onToggleFullscreen: PropTypes.func.isRequired,
   cameraActive: PropTypes.bool.isRequired,

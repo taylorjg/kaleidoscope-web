@@ -61,6 +61,7 @@ export const getUniformLocations = (gl, program) => ({
   uComplexity: gl.getUniformLocation(program, "uComplexity"),
   uSeed: gl.getUniformLocation(program, "uSeed"),
   uAutoSeed: gl.getUniformLocation(program, "uAutoSeed"),
+  uPatternScale: gl.getUniformLocation(program, "uPatternScale"),
 });
 
 /**

@@ -26,6 +26,7 @@ uniform float uFlow;
 uniform float uComplexity;
 uniform float uSeed;
 uniform float uAutoSeed;
+uniform float uPatternScale;
 
 const float TAU = 6.28318530718;
 
@@ -129,7 +130,7 @@ vec3 generativeColor(vec2 uv) {
   ) - 0.5;
   p += warp * (0.12 + flow * 0.18);
 
-  vec2 q = p * detail;
+  vec2 q = p * detail * uPatternScale;
 
   vec4 v1 = voronoiLayer(q, t, seedOff);
   vec4 v2 = voronoiLayer(q * 1.85 + 3.1, t * 0.7, seedOff + 9.2);
@@ -138,8 +139,8 @@ vec3 generativeColor(vec2 uv) {
   float cellDist = v1.x;
   float cellHash = hash21(v1.zw + seedOff);
 
-  float radialHue = mix(0.06, 0.58, smoothstep(0.0, 0.55, r));
-  radialHue += mix(0.0, 0.12, smoothstep(0.55, 1.0, r));
+  float radialHue = mix(0.06, 0.58, smoothstep(0.0, 0.55 / uPatternScale, r));
+  radialHue += mix(0.0, 0.12, smoothstep(0.55 / uPatternScale, 1.0, r));
   float hue = fract(
     cellHash * 0.42 +
     radialHue +
@@ -147,9 +148,9 @@ vec3 generativeColor(vec2 uv) {
     r * 0.08
   );
 
-  float cellGlow = 1.0 - smoothstep(0.0, 0.42, cellDist);
+  float cellGlow = 1.0 - smoothstep(0.0, 0.42 / uPatternScale, cellDist);
   cellGlow = pow(cellGlow, 1.35);
-  float innerBloom = smoothstep(0.15, 0.0, cellDist);
+  float innerBloom = smoothstep(0.15 / uPatternScale, 0.0, cellDist);
 
   float light = 0.34 + cellGlow * 0.4 + innerBloom * 0.18;
   light += fbm(q * 0.6 + cellHash) * 0.08;
