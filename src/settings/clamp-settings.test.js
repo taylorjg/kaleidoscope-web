@@ -20,7 +20,7 @@ describe("clampSettings", () => {
   });
 
   it("rejects invalid mode", () => {
-    expect(clampSettings({ mode: "invalid" }).mode).toBe("generated");
+    expect(clampSettings({ mode: "invalid" }).mode).toBe("generative");
   });
 
   it("parses controls boolean", () => {

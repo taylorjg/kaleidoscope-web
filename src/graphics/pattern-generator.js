@@ -3,7 +3,7 @@ export const AUTO_SEED_MIN_SECONDS = 18;
 export const AUTO_SEED_MAX_SECONDS = 32;
 
 /**
- * Manages generated-mode auto-seed shifts on a timer.
+ * Manages generative-mode auto-seed shifts on a timer.
  */
 export class PatternGenerator {
   constructor() {

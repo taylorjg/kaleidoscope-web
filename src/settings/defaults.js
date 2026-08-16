@@ -1,6 +1,6 @@
 /** Default URL / engine settings (single source of truth for defaults). */
 export const DEFAULT_URL_SETTINGS = {
-  mode: "generated",
+  mode: "generative",
   segments: 8,
   mirror: true,
   rotation: 25,
@@ -13,6 +13,6 @@ export const DEFAULT_URL_SETTINGS = {
 
 export const SLIDER_DEBOUNCE_MS = 250;
 
-export const MODES = ["camera", "generated"];
+export const MODES = ["camera", "generative"];
 
 export const SLIDER_KEYS = ["rotation", "motion", "detail"];

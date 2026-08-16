@@ -2,13 +2,13 @@
 
 # Kaleidoscope Web
 
-Browser kaleidoscope with **generated** (procedural stained glass) and **camera** (webcam) modes. Built as a proving ground for a clean React ↔ WebGL bridge.
+Browser kaleidoscope with **generative** (procedural stained glass) and **camera** (webcam) modes. Built as a proving ground for a clean React ↔ WebGL bridge.
 
 Live demo: https://taylorjg.github.io/kaleidoscope-web/
 
 ## Features
 
-- Generated mode — stained-glass procedural patterns, auto palette shifts, tunable sliders
+- Generative mode — stained-glass procedural patterns, auto palette shifts, tunable sliders
 - Camera mode — live webcam through kaleidoscope symmetry
 - Shareable URLs — settings sync to query string via [nuqs](https://nuqs.dev)
 - Snapshot — download PNG
@@ -18,7 +18,7 @@ Live demo: https://taylorjg.github.io/kaleidoscope-web/
 
 | Param | Example | Description |
 |-------|---------|-------------|
-| `mode` | `generated` | `generated` or `camera` |
+| `mode` | `generative` | `generative` or `camera` |
 | `segments` | `8` | 3–12 |
 | `mirror` | `1` | Mirror symmetry |
 | `rotation` | `25` | Rotation speed (0–100) |
@@ -28,7 +28,7 @@ Live demo: https://taylorjg.github.io/kaleidoscope-web/
 | `controls` | `0` | Hide control panel |
 | `fullscreen` | `1` | Enter fullscreen on load |
 
-Example: `/kaleidoscope-web/?mode=generated&segments=8&motion=50&controls=0`
+Example: `/kaleidoscope-web/?mode=generative&segments=8&motion=50&controls=0`
 
 ## Development
 

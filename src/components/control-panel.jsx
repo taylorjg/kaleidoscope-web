@@ -61,7 +61,7 @@ export const ControlPanel = ({
   onToggleFullscreen,
   cameraActive,
 }) => {
-  const isGenerated = settings.mode === "generated";
+  const isGenerative = settings.mode === "generative";
 
   const handleModeChange = useCallback(
     (mode) => setImmediate({ mode }),
@@ -133,7 +133,7 @@ export const ControlPanel = ({
             <PermissionPrompt
               status={status}
               onRetry={() => setImmediate({ mode: "camera" })}
-              onSwitchGenerated={() => setImmediate({ mode: "generated" })}
+              onSwitchGenerative={() => setImmediate({ mode: "generative" })}
             />
 
             <ModeToggle mode={settings.mode} onChange={handleModeChange} />
@@ -163,7 +163,7 @@ export const ControlPanel = ({
               onChange={(v) => setSlider("rotation", v)}
             />
 
-            {isGenerated && (
+            {isGenerative && (
               <>
                 <SliderRow
                   label="Motion"

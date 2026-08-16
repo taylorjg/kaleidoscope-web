@@ -3,7 +3,7 @@ import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-export const PermissionPrompt = ({ status, onRetry, onSwitchGenerated }) => {
+export const PermissionPrompt = ({ status, onRetry, onSwitchGenerative }) => {
   if (
     status?.type !== "camera-denied" &&
     status?.type !== "camera-unavailable"
@@ -14,7 +14,7 @@ export const PermissionPrompt = ({ status, onRetry, onSwitchGenerated }) => {
   const message =
     status.type === "camera-unavailable"
       ? "Camera access is not available in this browser."
-      : "Camera permission was denied. Allow camera access or switch to generated mode.";
+      : "Camera permission was denied. Allow camera access or switch to generative mode.";
 
   return (
     <Alert
@@ -27,8 +27,8 @@ export const PermissionPrompt = ({ status, onRetry, onSwitchGenerated }) => {
               Retry
             </Button>
           )}
-          <Button color="inherit" size="small" onClick={onSwitchGenerated}>
-            Generated
+          <Button color="inherit" size="small" onClick={onSwitchGenerative}>
+            Generative
           </Button>
         </Stack>
       }
@@ -41,5 +41,5 @@ export const PermissionPrompt = ({ status, onRetry, onSwitchGenerated }) => {
 PermissionPrompt.propTypes = {
   status: PropTypes.shape({ type: PropTypes.string }),
   onRetry: PropTypes.func.isRequired,
-  onSwitchGenerated: PropTypes.func.isRequired,
+  onSwitchGenerative: PropTypes.func.isRequired,
 };

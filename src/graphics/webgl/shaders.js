@@ -112,7 +112,7 @@ vec4 voronoiLayer(vec2 uv, float t, vec2 seedOff) {
   return vec4(sqrt(f1), edge, cell);
 }
 
-vec3 generatedColor(vec2 uv) {
+vec3 generativeColor(vec2 uv) {
   float flow = uFlow / 100.0;
   float detail = mix(2.8, 8.5, uComplexity / 100.0);
   float t = uTime * (0.04 + flow * 0.12);
@@ -188,7 +188,7 @@ void main() {
 
   vec3 col;
   if (uMode < 0.5) {
-    col = generatedColor(kUv);
+    col = generativeColor(kUv);
   } else {
     col = sampleCamera(kUv);
   }

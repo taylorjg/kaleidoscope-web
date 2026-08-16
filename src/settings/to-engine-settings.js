@@ -11,7 +11,7 @@ export const toEngineSettings = (params) => {
     segments: s.segments,
     mirror: s.mirror,
     rotation: s.rotation,
-    generated: {
+    generative: {
       motion: s.motion,
       rotation: s.rotation,
       detail: s.detail,

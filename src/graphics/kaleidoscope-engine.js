@@ -88,7 +88,7 @@ export class KaleidoscopeEngine {
     this._pattern.reseed();
     this._settings = {
       ...this._settings,
-      generated: { ...this._settings.generated, seed },
+      generative: { ...this._settings.generative, seed },
     };
     this._settingsRef.current = this._settings;
     return seed;
