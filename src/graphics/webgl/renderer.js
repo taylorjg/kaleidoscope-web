@@ -33,11 +33,9 @@ export const drawFrame = (
   gl.uniform1f(uniforms.uSegments, state.segments);
   gl.uniform1f(uniforms.uMirror, state.mirror ? 1 : 0);
   gl.uniform1f(uniforms.uKaleidoRotation, state.rotation);
-  gl.uniform1f(uniforms.uFlow, state.ambient.flow);
-  gl.uniform1f(uniforms.uColourShift, state.ambient.colourShift);
-  gl.uniform1f(uniforms.uComplexity, state.ambient.complexity);
-  gl.uniform1f(uniforms.uSaturation, state.ambient.saturation);
-  gl.uniform1f(uniforms.uSeed, state.ambient.seed);
+  gl.uniform1f(uniforms.uFlow, state.generated.motion);
+  gl.uniform1f(uniforms.uComplexity, state.generated.detail);
+  gl.uniform1f(uniforms.uSeed, state.generated.seed);
   gl.uniform1f(uniforms.uAutoSeed, autoSeed);
   gl.uniform1f(uniforms.uHasCameraTexture, hasCamera ? 1 : 0);
 

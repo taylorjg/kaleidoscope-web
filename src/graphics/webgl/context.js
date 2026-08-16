@@ -58,9 +58,7 @@ export const getUniformLocations = (gl, program) => ({
   uMirror: gl.getUniformLocation(program, "uMirror"),
   uKaleidoRotation: gl.getUniformLocation(program, "uKaleidoRotation"),
   uFlow: gl.getUniformLocation(program, "uFlow"),
-  uColourShift: gl.getUniformLocation(program, "uColourShift"),
   uComplexity: gl.getUniformLocation(program, "uComplexity"),
-  uSaturation: gl.getUniformLocation(program, "uSaturation"),
   uSeed: gl.getUniformLocation(program, "uSeed"),
   uAutoSeed: gl.getUniformLocation(program, "uAutoSeed"),
 });

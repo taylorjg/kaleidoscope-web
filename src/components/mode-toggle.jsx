@@ -16,8 +16,8 @@ export const ModeToggle = ({ mode, onChange }) => {
       aria-label="Kaleidoscope mode"
       fullWidth
     >
-      <ToggleButton value="ambient" aria-label="Ambient mode">
-        Ambient
+      <ToggleButton value="generated" aria-label="Generated mode">
+        Generated
       </ToggleButton>
       <ToggleButton value="camera" aria-label="Camera mode">
         Camera
@@ -27,6 +27,6 @@ export const ModeToggle = ({ mode, onChange }) => {
 };
 
 ModeToggle.propTypes = {
-  mode: PropTypes.oneOf(["camera", "ambient"]).isRequired,
+  mode: PropTypes.oneOf(["camera", "generated"]).isRequired,
   onChange: PropTypes.func.isRequired,
 };

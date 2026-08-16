@@ -22,22 +22,8 @@ export const clampSettings = (raw) => {
     0,
     100
   );
-  s.flow = clamp(Number(s.flow) || DEFAULT_URL_SETTINGS.flow, 0, 100);
-  s.colourShift = clamp(
-    Number(s.colourShift) || DEFAULT_URL_SETTINGS.colourShift,
-    0,
-    100
-  );
-  s.complexity = clamp(
-    Number(s.complexity) || DEFAULT_URL_SETTINGS.complexity,
-    0,
-    100
-  );
-  s.saturation = clamp(
-    Number(s.saturation) || DEFAULT_URL_SETTINGS.saturation,
-    0,
-    100
-  );
+  s.motion = clamp(Number(s.motion) || DEFAULT_URL_SETTINGS.motion, 0, 100);
+  s.detail = clamp(Number(s.detail) || DEFAULT_URL_SETTINGS.detail, 0, 100);
   s.seed =
     s.seed == null || Number.isNaN(Number(s.seed))
       ? DEFAULT_URL_SETTINGS.seed

@@ -11,12 +11,10 @@ export const toEngineSettings = (params) => {
     segments: s.segments,
     mirror: s.mirror,
     rotation: s.rotation,
-    ambient: {
-      flow: s.flow,
+    generated: {
+      motion: s.motion,
       rotation: s.rotation,
-      colourShift: s.colourShift,
-      complexity: s.complexity,
-      saturation: s.saturation,
+      detail: s.detail,
       seed: s.seed,
     },
     showControls: s.controls,

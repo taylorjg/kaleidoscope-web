@@ -19,7 +19,7 @@ React (App.jsx)
 | `constructor(container, { onStatus })` | Append canvas, init WebGL, start rAF |
 | `setSettings(settings)` | Merge settings; start/stop camera on mode change |
 | `snapshot()` | PNG data URL |
-| `reseed()` | New ambient pattern seed |
+| `reseed()` | New generated pattern seed |
 | `dispose()` | Cancel rAF, stop camera, remove canvas, lose GL context |
 
 ### useGraphicsEngine

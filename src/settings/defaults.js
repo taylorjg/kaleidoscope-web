@@ -1,13 +1,11 @@
 /** Default URL / engine settings (single source of truth for defaults). */
 export const DEFAULT_URL_SETTINGS = {
-  mode: "ambient",
-  segments: 6,
+  mode: "generated",
+  segments: 8,
   mirror: true,
-  rotation: 30,
-  flow: 30,
-  colourShift: 40,
-  complexity: 50,
-  saturation: 70,
+  rotation: 25,
+  motion: 50,
+  detail: 10,
   seed: Math.floor(Math.random() * 100000),
   controls: true,
   fullscreen: false,
@@ -15,12 +13,6 @@ export const DEFAULT_URL_SETTINGS = {
 
 export const SLIDER_DEBOUNCE_MS = 250;
 
-export const MODES = ["camera", "ambient"];
+export const MODES = ["camera", "generated"];
 
-export const SLIDER_KEYS = [
-  "rotation",
-  "flow",
-  "colourShift",
-  "complexity",
-  "saturation",
-];
+export const SLIDER_KEYS = ["rotation", "motion", "detail"];

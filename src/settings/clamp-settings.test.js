@@ -15,12 +15,12 @@ describe("clampSettings", () => {
   });
 
   it("clamps sliders to 0–100", () => {
-    expect(clampSettings({ flow: -5 }).flow).toBe(0);
-    expect(clampSettings({ flow: 200 }).flow).toBe(100);
+    expect(clampSettings({ motion: -5 }).motion).toBe(0);
+    expect(clampSettings({ motion: 200 }).motion).toBe(100);
   });
 
   it("rejects invalid mode", () => {
-    expect(clampSettings({ mode: "invalid" }).mode).toBe("ambient");
+    expect(clampSettings({ mode: "invalid" }).mode).toBe("generated");
   });
 
   it("parses controls boolean", () => {

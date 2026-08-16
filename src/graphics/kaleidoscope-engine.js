@@ -1,6 +1,6 @@
 import { toEngineSettings } from "@app/settings/to-engine-settings.js";
 import { DEFAULT_URL_SETTINGS } from "@app/settings/defaults.js";
-import { AmbientGenerator } from "./ambient-generator.js";
+import { PatternGenerator } from "./pattern-generator.js";
 import { CameraSource } from "./camera-source.js";
 import { initWebGL } from "./webgl/context.js";
 import {
@@ -29,6 +29,10 @@ export class KaleidoscopeEngine {
     this._rafId = null;
     this._startTime = performance.now();
 
+    this._pattern = new PatternGenerator();
+    this._camera = new CameraSource({ onStatus: this._onStatus });
+    this._lastMode = this._settings.mode;
+
     this._canvas = document.createElement("canvas");
     this._canvas.style.display = "block";
     this._canvas.style.width = "100%";
@@ -46,10 +50,6 @@ export class KaleidoscopeEngine {
       this._onStatus({ type: "webgl-unavailable" });
       return;
     }
-
-    this._ambient = new AmbientGenerator();
-    this._camera = new CameraSource({ onStatus: this._onStatus });
-    this._lastMode = this._settings.mode;
 
     this._resizeObserver = new ResizeObserver(() => this._handleResize());
     this._resizeObserver.observe(container);
@@ -76,19 +76,19 @@ export class KaleidoscopeEngine {
     if (settings.mode !== this._lastMode) {
       this._lastMode = settings.mode;
       if (settings.mode === "camera") {
-        this._camera.start();
+        this._camera?.start();
       } else {
-        this._camera.stop();
+        this._camera?.stop();
       }
     }
   }
 
   reseed() {
     const seed = Math.floor(Math.random() * 100000);
-    this._ambient.reseed();
+    this._pattern.reseed();
     this._settings = {
       ...this._settings,
-      ambient: { ...this._settings.ambient, seed },
+      generated: { ...this._settings.generated, seed },
     };
     this._settingsRef.current = this._settings;
     return seed;
@@ -114,7 +114,7 @@ export class KaleidoscopeEngine {
 
     const settings = this._settingsRef.current;
     const time = (performance.now() - this._startTime) / 1000;
-    const autoSeed = this._ambient.tick(time);
+    const autoSeed = this._pattern.tick(time);
 
     let hasCamera = false;
     if (settings.mode === "camera" && this._camera.isActive) {

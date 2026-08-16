@@ -59,7 +59,7 @@ export const ControlPanel = ({
   onToggleFullscreen,
   cameraActive,
 }) => {
-  const isAmbient = settings.mode === "ambient";
+  const isGenerated = settings.mode === "generated";
 
   const handleModeChange = useCallback(
     (mode) => setImmediate({ mode }),
@@ -85,9 +85,7 @@ export const ControlPanel = ({
         <Stack
           direction="row"
           spacing={0.5}
-          alignItems="center"
-          justifyContent="flex-end"
-          sx={{ pb: 0.5 }}
+          sx={{ pb: 0.5, alignItems: "center", justifyContent: "flex-end" }}
         >
           <CameraAltIcon fontSize="small" color="error" aria-hidden />
           <Typography variant="caption">Camera active</Typography>
@@ -97,8 +95,7 @@ export const ControlPanel = ({
       <Stack
         direction="row"
         spacing={0.5}
-        justifyContent="flex-end"
-        sx={{ width: "100%" }}
+        sx={{ width: "100%", justifyContent: "flex-end" }}
       >
         <IconButton
           onClick={onToggleFullscreen}
@@ -134,7 +131,7 @@ export const ControlPanel = ({
             <PermissionPrompt
               status={status}
               onRetry={() => setImmediate({ mode: "camera" })}
-              onSwitchAmbient={() => setImmediate({ mode: "ambient" })}
+              onSwitchGenerated={() => setImmediate({ mode: "generated" })}
             />
 
             <ModeToggle mode={settings.mode} onChange={handleModeChange} />
@@ -152,7 +149,7 @@ export const ControlPanel = ({
                 <Switch
                   checked={params.mirror}
                   onChange={(e) => setImmediate({ mirror: e.target.checked })}
-                  inputProps={{ "aria-label": "Mirror symmetry" }}
+                  slotProps={{ input: { "aria-label": "Mirror symmetry" } }}
                 />
               }
               label="Mirror"
@@ -164,27 +161,17 @@ export const ControlPanel = ({
               onChange={(v) => setSlider("rotation", v)}
             />
 
-            {isAmbient && (
+            {isGenerated && (
               <>
                 <SliderRow
-                  label="Flow"
-                  value={params.flow}
-                  onChange={(v) => setSlider("flow", v)}
+                  label="Motion"
+                  value={params.motion}
+                  onChange={(v) => setSlider("motion", v)}
                 />
                 <SliderRow
-                  label="Colour shift"
-                  value={params.colourShift}
-                  onChange={(v) => setSlider("colourShift", v)}
-                />
-                <SliderRow
-                  label="Complexity"
-                  value={params.complexity}
-                  onChange={(v) => setSlider("complexity", v)}
-                />
-                <SliderRow
-                  label="Saturation"
-                  value={params.saturation}
-                  onChange={(v) => setSlider("saturation", v)}
+                  label="Detail"
+                  value={params.detail}
+                  onChange={(v) => setSlider("detail", v)}
                 />
                 <Button
                   variant="outlined"

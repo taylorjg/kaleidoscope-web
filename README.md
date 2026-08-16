@@ -1,12 +1,12 @@
 # Kaleidoscope Web
 
-Browser kaleidoscope with **ambient** (procedural) and **camera** (webcam) modes. Built as a proving ground for a clean React ↔ WebGL bridge.
+Browser kaleidoscope with **generated** (procedural stained glass) and **camera** (webcam) modes. Built as a proving ground for a clean React ↔ WebGL bridge.
 
 Live demo: https://taylorjg.github.io/kaleidoscope-web/
 
 ## Features
 
-- Ambient mode — flowing procedural patterns, auto palette shifts, tunable sliders
+- Generated mode — stained-glass procedural patterns, auto palette shifts, tunable sliders
 - Camera mode — live webcam through kaleidoscope symmetry
 - Shareable URLs — settings sync to query string via [nuqs](https://nuqs.dev)
 - Snapshot — download PNG
@@ -16,19 +16,17 @@ Live demo: https://taylorjg.github.io/kaleidoscope-web/
 
 | Param | Example | Description |
 |-------|---------|-------------|
-| `mode` | `ambient` | `ambient` or `camera` |
+| `mode` | `generated` | `generated` or `camera` |
 | `segments` | `8` | 3–12 |
 | `mirror` | `1` | Mirror symmetry |
-| `rotation` | `40` | Rotation speed (0–100) |
-| `flow` | `60` | Ambient flow speed |
-| `colourShift` | `20` | Ambient hue shift |
-| `complexity` | `80` | Ambient noise scale |
-| `saturation` | `50` | Ambient saturation |
-| `seed` | `42` | Ambient pattern seed |
+| `rotation` | `25` | Rotation speed (0–100) |
+| `motion` | `50` | Pattern motion (0–100) |
+| `detail` | `10` | Cell detail (0–100) |
+| `seed` | `42` | Pattern seed |
 | `controls` | `0` | Hide control panel |
 | `fullscreen` | `1` | Enter fullscreen on load |
 
-Example: `/kaleidoscope-web/?mode=ambient&segments=8&flow=60&controls=0`
+Example: `/kaleidoscope-web/?mode=generated&segments=8&motion=50&controls=0`
 
 ## Development
 
