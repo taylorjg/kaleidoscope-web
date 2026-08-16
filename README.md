@@ -8,7 +8,7 @@ Live demo: https://taylorjg.github.io/kaleidoscope-web/
 
 ## Features
 
-- Generative mode — stained-glass procedural patterns, auto palette shifts, tunable sliders
+- Generative mode — stained-glass procedural patterns, auto palette shifts, tunable sliders; tap the screen for a new pattern
 - Camera mode — live webcam through kaleidoscope symmetry
 - Shareable URLs — settings sync to query string via [nuqs](https://nuqs.dev)
 - Snapshot — download PNG

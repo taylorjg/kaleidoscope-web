@@ -17,7 +17,7 @@ export const App = () => {
   const { settings, params, setImmediate, setSlider } =
     useKaleidoscopeSettings();
   const [status, setStatus] = useState({ type: "idle" });
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const canvasRef = useRef(null);
@@ -74,6 +74,7 @@ export const App = () => {
         ref={canvasRef}
         settings={settings}
         onStatus={handleStatus}
+        onTap={settings.mode === "generative" ? handleReseed : undefined}
       />
 
       {settings.showControls && (
