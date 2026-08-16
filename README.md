@@ -1,3 +1,5 @@
+[![CI/CD](https://github.com/taylorjg/kaleidoscope-web/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/taylorjg/kaleidoscope-web/actions/workflows/ci-cd.yml)
+
 # Kaleidoscope Web
 
 Browser kaleidoscope with **generated** (procedural stained glass) and **camera** (webcam) modes. Built as a proving ground for a clean React ↔ WebGL bridge.
@@ -39,6 +41,8 @@ npm run build
 ```
 
 ## Deploy (GitHub Pages)
+
+Pushing a version tag (e.g. `v0.0.2`) triggers CI to build and deploy to GitHub Pages. You can also deploy manually:
 
 ```bash
 npm run deploy
